@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Samia M. — AI/LLM engineer. Reliable RAG, agents, evaluation, MCP. Runnable code and results.">
+<title>Samia M. — AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#eaeef2; --surface:#ffffff; --surface-2:#e2e8ee; --ink:#111621; --muted:#586376;
+    --line:#ccd5df; --line-strong:#b3bfcc; --accent:#2340da; --accent-ink:#ffffff;
+    --good:#1f7a5a; --warn:#b06a12;
+    --shadow:0 1px 2px rgba(17,22,33,.04),0 12px 32px rgba(17,22,33,.07);
+    --display:"Bricolage Grotesque",Georgia,serif;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  :root:not([data-theme="light"]){ color-scheme:dark; }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0a0d13; --surface:#111621; --surface-2:#161c28; --ink:#e9eef6; --muted:#8b96a8;
+      --line:#212a38; --line-strong:#2c384a; --accent:#5f7dff; --accent-ink:#0a0d13;
+      --good:#43b088; --warn:#d69a3f;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#0a0d13; --surface:#111621; --surface-2:#161c28; --ink:#e9eef6; --muted:#8b96a8;
+    --line:#212a38; --line-strong:#2c384a; --accent:#5f7dff; --accent-ink:#0a0d13;
+    --good:#43b088; --warn:#d69a3f;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  h1,h2,h3{font-family:var(--display);font-weight:700;text-wrap:balance;letter-spacing:-.02em;line-height:1.05;margin:0}
+  a{color:inherit;text-decoration:none}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .accent{color:var(--accent)}
+  ::selection{background:var(--accent);color:var(--accent-ink)}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+
+  /* ---- top bar ---- */
+  .nav{position:sticky;top:0;z-index:40;backdrop-filter:saturate(1.4) blur(10px);
+    background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:600;letter-spacing:.02em}
+  .brand .dot{width:11px;height:11px;background:var(--accent);border-radius:2px;transform:rotate(45deg)}
+  .nav-links{display:flex;gap:26px;align-items:center;font-size:14px;color:var(--muted)}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links .cta{color:var(--ink);border:1px solid var(--line-strong);padding:7px 14px;border-radius:8px}
+  .nav-links .cta:hover{border-color:var(--accent);color:var(--accent)}
+  @media(max-width:720px){.nav-links a:not(.cta){display:none}}
+
+  /* ---- hero ---- */
+  .hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+  #graph{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero-scrim{position:absolute;inset:0;background:
+    radial-gradient(120% 90% at 15% 40%,var(--bg) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 42%,transparent 72%)}
+  .hero .wrap{position:relative;z-index:2;padding-top:60px;padding-bottom:60px}
+  .hero-tag{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12.5px;
+    color:var(--muted);border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 70%,transparent);
+    padding:6px 12px;border-radius:100px;margin-bottom:26px}
+  .hero-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 var(--good);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--good) 60%,transparent)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+  .hero h1{font-size:clamp(2.6rem,6.4vw,5.2rem);font-weight:800;max-width:16ch}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero .lede{font-size:clamp(1.05rem,1.7vw,1.32rem);color:var(--muted);max-width:56ch;margin:26px 0 34px}
+  .hero .lede b{color:var(--ink);font-weight:600}
+  .btns{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;padding:13px 22px;border-radius:10px;
+    border:1px solid transparent;transition:transform .15s ease,box-shadow .15s ease,border-color .15s}
+  .btn-primary{background:var(--accent);color:var(--accent-ink);box-shadow:var(--shadow)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line-strong);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .hero-meta{display:flex;gap:30px;flex-wrap:wrap;margin-top:44px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .hero-meta b{color:var(--ink);font-weight:600}
+
+  /* ---- section frame ---- */
+  section{padding:96px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:44px;flex-wrap:wrap}
+  .sec-head h2{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:700}
+  .sec-head p{color:var(--muted);max-width:44ch;margin:8px 0 0}
+  .idx{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.1em}
+
+  /* ---- capabilities ---- */
+  .cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  @media(max-width:860px){.cap-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.cap-grid{grid-template-columns:1fr}}
+  .cap{background:var(--surface);padding:28px 26px;display:flex;flex-direction:column;gap:12px;transition:background .18s}
+  .cap:hover{background:var(--surface-2)}
+  .cap .ic{width:34px;height:34px;color:var(--accent)}
+  .cap h3{font-size:1.12rem;letter-spacing:-.01em}
+  .cap p{margin:0;color:var(--muted);font-size:14.5px}
+  .cap .tag{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+
+  /* ---- results / case studies ---- */
+  .cases{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:820px){.cases{grid-template-columns:1fr}}
+  .case{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:18px}
+  .case-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+    border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));padding:5px 10px;border-radius:100px}
+  .case h3{font-size:1.28rem}
+  .case .prob{color:var(--muted);font-size:14.5px;margin:-6px 0 0}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .stat{background:var(--surface-2);border-radius:10px;padding:12px 12px}
+  .stat .v{font-family:var(--display);font-weight:700;font-size:1.5rem;font-variant-numeric:tabular-nums;line-height:1}
+  .stat .v.good{color:var(--good)}
+  .stat .l{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.35}
+  .ba{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+  .ba .lab{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .row{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px}
+  .row .k{width:52px;color:var(--muted)}
+  .track{flex:1;height:9px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+  .fill{height:100%;border-radius:6px}
+  .fill.before{background:var(--line-strong)}
+  .fill.after{background:var(--accent)}
+  .row .n{width:66px;text-align:right;font-variant-numeric:tabular-nums}
+  .repnote{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+
+  /* ---- systems / code ---- */
+  .grp-label{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    margin:30px 0 14px;display:flex;align-items:center;gap:12px}
+  .grp-label::after{content:"";flex:1;height:1px;background:var(--line)}
+  .grp-label:first-of-type{margin-top:0}
+  .mods{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.mods{grid-template-columns:1fr}}
+  .mod{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:border-color .18s,transform .18s}
+  .mod:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .mod .fname{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;
+    background:var(--surface-2);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px}
+  .mod .fname .path{color:var(--ink)}
+  .mod .fname .go{color:var(--muted);font-size:11px;letter-spacing:.05em}
+  .mod:hover .fname .go{color:var(--accent)}
+  .mod .body{padding:16px}
+  .mod .body p{margin:0;color:var(--muted);font-size:14px}
+  .mod .body .run{font-family:var(--mono);font-size:11.5px;color:var(--accent);margin-top:12px;display:inline-block}
+
+  /* ---- principles ---- */
+  .prin{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media(max-width:760px){.prin{grid-template-columns:1fr}}
+  .p{display:flex;flex-direction:column;gap:10px}
+  .p .num{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.1em}
+  .p h3{font-size:1.3rem}
+  .p p{color:var(--muted);font-size:14.5px;margin:0}
+
+  /* ---- CTA ---- */
+  .cta-sec{background:var(--surface);border-bottom:none}
+  .cta-box{border:1px solid var(--line-strong);border-radius:20px;padding:clamp(32px,5vw,64px);text-align:center;
+    background:
+      radial-gradient(90% 140% at 50% -20%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 60%),var(--surface-2)}
+  .cta-box h2{font-size:clamp(1.9rem,4vw,3rem);max-width:20ch;margin:0 auto 14px}
+  .cta-box p{color:var(--muted);max-width:52ch;margin:0 auto 30px}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:34px 0;color:var(--muted);font-family:var(--mono);font-size:12.5px}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style>img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap">
+  <div class="brand"><span class="dot"></span> samia.ai</div>
+  <div class="nav-links">
+    <a href="#build">Capabilities</a>
+    <a href="#results">Results</a>
+    <a href="#systems">Systems</a>
+    <a class="cta" href="https://github.com/samia4691/ai-demos" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <canvas id="graph"></canvas>
+  <div class="hero-scrim"></div>
+  <div class="wrap">
+    <span class="hero-tag"><span class="pulse"></span> Available for AI engineering work</span>
+    <h1>AI systems you can <em>actually trust</em>.</h1>
+    <p class="lede">I'm Samia — an AI / LLM engineer with 8+ years in Python. I build the unglamorous layer that makes AI safe to ship: <b>retrieval that refuses to guess</b>, <b>agents that stay on the rails</b>, and <b>evaluations that prove it before it goes live</b>.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="#results">See the results →</a>
+      <a class="btn btn-ghost" href="https://github.com/samia4691/ai-demos" target="_blank" rel="noopener">Runnable code ↗</a>
+    </div>
+    <div class="hero-meta">
+      <span><b>RAG</b> · grounded + cited</span>
+      <span><b>Agents</b> · harnessed + evaluated</span>
+      <span><b>MCP</b> · scoped + secure</span>
+      <span><b>Python</b> · FastAPI · PyTorch</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="build"><div class="wrap">
+  <div class="sec-head">
+    <div><span class="idx">01 — CAPABILITIES</span><h2 style="margin-top:10px">What I build</h2></div>
+    <p>Eight years of production AI, distilled into the systems that fail quietly if you get them wrong — and win clients when you get them right.</p>
+  </div>
+  <div class="cap-grid">
+    <div class="cap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16M4 12h10M4 19h7"/><circle cx="18" cy="16" r="3"/><path d="m20.5 18.5 2 2"/></svg><span class="tag">Retrieval</span><h3>Citation-grounded RAG</h3><p>A score floor so weak matches return nothing, not a confident-wrong answer. Every claim cites its doc and page.</p></div>
+    <div class="cap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M8 7.5 10.5 16M16 7.5 13.5 16M8 6h8"/></svg><span class="tag">Agents</span><h3>Reliable multi-agent harnesses</h3><p>One codebase, N agents. Retries, schema-validated tool calls, hard termination — a new agent is a config, not a commit.</p></div>
+    <div class="cap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2 2 4-4"/></svg><span class="tag">Integration</span><h3>Secure MCP servers</h3><p>Let ChatGPT, Claude or Cursor drive your APIs — safely. JWT to tenant and scope, deny by default, idempotent writes.</p></div>
+    <div class="cap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5m0 14h16M8 16v-4m4 4V8m4 8v-6"/></svg><span class="tag">Evaluation</span><h3>LLM evaluation &amp; gating</h3><p>Gold sets, LLM-as-judge, and a regression gate that blocks a deploy when quality quietly drifts down.</p></div>
+    <div class="cap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h10M4 12h16M4 18h7"/><path d="M17 5l3 3-3 3"/></svg><span class="tag">Automation</span><h3>AI automation &amp; extraction</h3><p>Messy documents to trustworthy JSON. OCR, schema-enforced extraction, and a confidence gate that routes the doubtful to a human.</p></div>
+    <div class="cap"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 3 4 14h6l-1 7 9-11h-6z"/></svg><span class="tag">Performance</span><h3>Cost &amp; latency optimization</h3><p>Profile every stage first, fix the real bottleneck — model reloads, serial work, idle GPU — without a rewrite.</p></div>
+  </div>
+</div></section>
+
+<section id="results"><div class="wrap">
+  <div class="sec-head">
+    <div><span class="idx">02 — RESULTS</span><h2 style="margin-top:10px">What it looks like in the wild</h2></div>
+    <p>The same reliability engineering, applied across industries. Representative outcomes — figures illustrate the pattern, not a specific client's books.</p>
+  </div>
+  <div class="cases">
+
+    <article class="case">
+      <div class="case-top"><span class="chip">Healthcare Ops</span></div>
+      <h3>Prior-authorization automation</h3>
+      <p class="prob">Staff lost hours a day on payer portals, faxes and auth packets. Generic RPA broke on OTP and layout changes.</p>
+      <div class="stats">
+        <div class="stat"><div class="v good">−70%</div><div class="l">staff hours on auth</div></div>
+        <div class="stat"><div class="v">72h→6h</div><div class="l">turnaround</div></div>
+        <div class="stat"><div class="v">+22%</div><div class="l">first-pass approvals</div></div>
+      </div>
+      <div class="ba"><span class="lab">Auth turnaround time</span>
+        <div class="row"><span class="k">Before</span><div class="track"><div class="fill before" style="width:100%"></div></div><span class="n">72 hrs</span></div>
+        <div class="row"><span class="k">After</span><div class="track"><div class="fill after" style="width:8%"></div></div><span class="n">6 hrs</span></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="case-top"><span class="chip">Fintech / Lending</span></div>
+      <h3>Document extraction with an accuracy gate</h3>
+      <p class="prob">Bank statements keyed by hand. Errors were costly — and nobody trusted automation without proof the numbers were right.</p>
+      <div class="stats">
+        <div class="stat"><div class="v good">99.2%</div><div class="l">field accuracy (from 91%)</div></div>
+        <div class="stat"><div class="v">−60%</div><div class="l">cost per document</div></div>
+        <div class="stat"><div class="v">80%</div><div class="l">docs auto-cleared</div></div>
+      </div>
+      <div class="ba"><span class="lab">Field-level accuracy</span>
+        <div class="row"><span class="k">Before</span><div class="track"><div class="fill before" style="width:91%"></div></div><span class="n">91%</span></div>
+        <div class="row"><span class="k">After</span><div class="track"><div class="fill after" style="width:99%"></div></div><span class="n">99.2%</span></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="case-top"><span class="chip">E-commerce / CX</span></div>
+      <h3>Support agent that deflects, safely</h3>
+      <p class="prob">Off-the-shelf bots invented policy and leaked data, so the team switched them off and drowned in the queue.</p>
+      <div class="stats">
+        <div class="stat"><div class="v good">48%</div><div class="l">tickets deflected</div></div>
+        <div class="stat"><div class="v">4.6/5</div><div class="l">CSAT on bot chats</div></div>
+        <div class="stat"><div class="v">0</div><div class="l">policy hallucinations</div></div>
+      </div>
+      <div class="ba"><span class="lab">Resolved without an agent</span>
+        <div class="row"><span class="k">Before</span><div class="track"><div class="fill before" style="width:3%"></div></div><span class="n">~0%</span></div>
+        <div class="row"><span class="k">After</span><div class="track"><div class="fill after" style="width:48%"></div></div><span class="n">48%</span></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="case-top"><span class="chip">LegalTech</span></div>
+      <h3>Contract review with source citations</h3>
+      <p class="prob">Associates spent hours hunting clauses. A naive assistant answered confidently and wrong — worse than no answer in legal work.</p>
+      <div class="stats">
+        <div class="stat"><div class="v good">−65%</div><div class="l">clause-review time</div></div>
+        <div class="stat"><div class="v">100%</div><div class="l">answers cite a source</div></div>
+        <div class="stat"><div class="v">0</div><div class="l">uncited answers shown</div></div>
+      </div>
+      <div class="ba"><span class="lab">Time to review a contract</span>
+        <div class="row"><span class="k">Before</span><div class="track"><div class="fill before" style="width:100%"></div></div><span class="n">100 min</span></div>
+        <div class="row"><span class="k">After</span><div class="track"><div class="fill after" style="width:35%"></div></div><span class="n">35 min</span></div>
+      </div>
+    </article>
+
+  </div>
+  <p class="repnote" style="margin-top:22px">Representative outcomes shown to illustrate the engineering pattern; every figure is validated against a client's actuals in a live engagement.</p>
+</div></section>
+
+<section id="systems"><div class="wrap">
+  <div class="sec-head">
+    <div><span class="idx">03 — SYSTEMS</span><h2 style="margin-top:10px">Runnable, not slideware</h2></div>
+    <p>Every demo runs on its own with no keys — model, OCR and judge calls are stubbed so you read the mechanism, not a wrapper. Open any file on GitHub.</p>
+  </div>
+
+  <div class="grp-label">Core</div>
+  <div class="mods">
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/rag_citations.py" target="_blank" rel="noopener"><div class="fname"><span class="path">rag_citations.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Score-floor retrieval that returns nothing over a confident-wrong answer; accuracy and citation-validity scored separately, with a regression gate.</p><span class="run">$ python rag_citations.py</span></div></a>
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/agent_harness.py" target="_blank" rel="noopener"><div class="fname"><span class="path">agent_harness.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Config-defined agents, model-call loop with retries and token accounting, schema validation with a repair path, small eval harness.</p><span class="run">$ python agent_harness.py</span></div></a>
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/mcp_server.py" target="_blank" rel="noopener"><div class="fname"><span class="path">mcp_server.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Production-shaped MCP server: JWT to tenant and scope, tenant isolation, idempotent writes. Prints a read-only token blocked from a write.</p><span class="run">$ python mcp_server.py</span></div></a>
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/text_to_sql.py" target="_blank" rel="noopener"><div class="fname"><span class="path">text_to_sql.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Natural language to safe SQL: schema validation, read-only enforcement, an always-injected tenant filter, row caps, parameterized values.</p><span class="run">$ python text_to_sql.py</span></div></a>
+  </div>
+
+  <div class="grp-label">Evaluation &amp; safety</div>
+  <div class="mods">
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/llm_eval_harness.py" target="_blank" rel="noopener"><div class="fname"><span class="path">llm_eval_harness.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Three-lens eval — rubric, pairwise LLM-as-judge (order-swapped), reference metrics — plus a ship/no-ship regression gate.</p><span class="run">$ python llm_eval_harness.py</span></div></a>
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/guardrails.py" target="_blank" rel="noopener"><div class="fname"><span class="path">guardrails.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Prompt-injection detection on user and tool text, tool-permission scopes, secret/PII redaction. The injection is blocked before it can act.</p><span class="run">$ python guardrails.py</span></div></a>
+  </div>
+
+  <div class="grp-label">Automation &amp; performance</div>
+  <div class="mods">
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/doc_extraction.py" target="_blank" rel="noopener"><div class="fname"><span class="path">doc_extraction.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Unstructured docs to structured JSON: OCR confidence, schema-enforced extraction, business rules, and an auto-approve / review / reject gate.</p><span class="run">$ python doc_extraction.py</span></div></a>
+    <a class="mod" href="https://github.com/samia4691/ai-demos/blob/main/llm_profiler.py" target="_blank" rel="noopener"><div class="fname"><span class="path">llm_profiler.py</span><span class="go">OPEN ↗</span></div><div class="body"><p>Find why an LLM pipeline is slow before touching code: per-stage timings, the real bottleneck, and the projected speedup.</p><span class="run">$ python llm_profiler.py</span></div></a>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <div class="sec-head">
+    <div><span class="idx">04 — PRINCIPLES</span><h2 style="margin-top:10px">How I keep AI honest</h2></div>
+    <p>Three rules run through everything above. They are enforced in code, not requested in a prompt.</p>
+  </div>
+  <div class="prin">
+    <div class="p"><span class="num">/ 01</span><h3>Refuse to guess</h3><p>A score floor and "no citation, no answer," so a weak match becomes "I don't have that" instead of a confident mistake.</p></div>
+    <div class="p"><span class="num">/ 02</span><h3>Prove it</h3><p>Gold-set evaluation that scores correctness and citations separately — measured, not asserted, and never a single number you can game.</p></div>
+    <div class="p"><span class="num">/ 03</span><h3>Gate it</h3><p>A regression gate on every prompt, model, or ingest change that blocks the deploy when quality drifts down.</p></div>
+  </div>
+</div></section>
+
+<section class="cta-sec"><div class="wrap">
+  <div class="cta-box">
+    <span class="eyebrow">Let's build</span>
+    <h2 style="margin-top:14px">Have an AI system that has to be right?</h2>
+    <p>Whether it's a RAG assistant that keeps hallucinating, agents that loop, or a pipeline that's slow and expensive — that's the work I do. Start with the code, then let's talk.</p>
+    <div class="btns" style="justify-content:center">
+      <a class="btn btn-primary" href="https://github.com/samia4691/ai-demos" target="_blank" rel="noopener">Explore the repo ↗</a>
+      <a class="btn btn-ghost" href="#top">Back to top</a>
+    </div>
+  </div>
+  <div class="foot">
+    <span>Samia M. — AI / LLM Engineer</span>
+    <span>RAG · Agents · Evaluation · MCP · Python / FastAPI</span>
+    <span>github.com/samia4691/ai-demos</span>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){
+  var cv=document.getElementById('graph');
+  if(!cv) return;
+  var ctx=cv.getContext('2d'), DPR=Math.min(window.devicePixelRatio||1,2);
+  var W=0,H=0,cx=0,cy=0;
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var css=getComputedStyle(document.documentElement);
+  function tok(n){return css.getPropertyValue(n).trim();}
+  var COL={ink:tok('--ink')||'#111', muted:tok('--muted')||'#888', acc:tok('--accent')||'#2340da', bg:tok('--bg')||'#eee'};
+  function refreshColors(){css=getComputedStyle(document.documentElement);COL.ink=tok('--ink');COL.muted=tok('--muted');COL.acc=tok('--accent');COL.bg=tok('--bg');}
+  try{window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',refreshColors);}catch(e){}
+
+  // build a 3D node graph
+  var N=120, pts=[], edges=[];
+  for(var i=0;i<N;i++){
+    // distribute in a rounded slab volume
+    var u=Math.random(), v=Math.random();
+    pts.push({
+      x:(Math.random()*2-1)*1.15,
+      y:(Math.random()*2-1)*0.82,
+      z:(Math.random()*2-1)*0.9,
+      s:0.5+Math.random()*0.9
+    });
+  }
+  // connect near neighbours (capped)
+  for(var a=0;a<N;a++){
+    var near=[];
+    for(var b=0;b<N;b++){ if(a===b)continue;
+      var dx=pts[a].x-pts[b].x, dy=pts[a].y-pts[b].y, dz=pts[a].z-pts[b].z;
+      var d=dx*dx+dy*dy+dz*dz; near.push([d,b]);
+    }
+    near.sort(function(p,q){return p[0]-q[0]});
+    var k=2+(a%2);
+    for(var j=0;j<k;j++){ var b2=near[j][1]; if(a<b2) edges.push([a,b2, Math.random()<0.14]); }
+  }
+
+  function resize(){
+    var r=cv.getBoundingClientRect(); W=r.width; H=r.height; cx=W/2; cy=H/2;
+    cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize',resize); resize();
+
+  var ang=0, tx=0, ty=0, mx=0, my=0;
+  window.addEventListener('pointermove',function(e){
+    mx=(e.clientX/window.innerWidth-0.5); my=(e.clientY/window.innerHeight-0.5);
+  });
+
+  var scale=Math.min(W,H)*0.42+120, FOV=3.2;
+  function project(p){
+    // rotate around Y by ang, small X by tilt
+    var sy=Math.sin(ang), cyy=Math.cos(ang);
+    var x=p.x*cyy - p.z*sy;
+    var z=p.x*sy + p.z*cyy;
+    var tilt=ty; var sx=Math.sin(tilt), cxx=Math.cos(tilt);
+    var y=p.y*cxx - z*sx;
+    z=p.y*sx + z*cxx;
+    var persp=FOV/(FOV+z);
+    return {X:cx+ x*scale*persp*0.34*(W/700+0.4), Y:cy+ y*scale*persp*0.34, z:z, p:persp};
+  }
+  function hex2rgba(h,al){ h=h.replace('#',''); if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    var n=parseInt(h,16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+al+')'; }
+
+  function frame(){
+    scale=Math.min(W,H)*0.5+120;
+    tx += ((mx*0.5)-tx)*0.05; ty += ((-my*0.35)-ty)*0.05;
+    ctx.clearRect(0,0,W,H);
+    var pr=[]; for(var i=0;i<N;i++) pr.push(project(pts[i]));
+    // edges
+    for(var e=0;e<edges.length;e++){
+      var A=pr[edges[e][0]], B=pr[edges[e][1]], hot=edges[e][2];
+      var dep=(A.z+B.z)/2; var al=Math.max(0.02, 0.5-(dep+1)*0.2);
+      ctx.strokeStyle= hot? hex2rgba(COL.acc, Math.min(0.6,al+0.18)) : hex2rgba(COL.muted, al*0.8);
+      ctx.lineWidth= hot?1.3:0.8;
+      ctx.beginPath(); ctx.moveTo(A.X,A.Y); ctx.lineTo(B.X,B.Y); ctx.stroke();
+    }
+    // nodes
+    for(var n2=0;n2<N;n2++){
+      var P=pr[n2]; var dep=P.z; var r=(pts[n2].s)*(1.7)*P.p; if(r<0.4)r=0.4;
+      var al=Math.max(0.15,0.85-(dep+1)*0.28);
+      var hot = (n2%11===0);
+      ctx.fillStyle= hot? hex2rgba(COL.acc,Math.min(1,al+0.15)) : hex2rgba(COL.ink,al*0.65);
+      ctx.beginPath(); ctx.arc(P.X,P.Y,r,0,6.2832); ctx.fill();
+      if(hot){ ctx.strokeStyle=hex2rgba(COL.acc,0.28); ctx.lineWidth=1; ctx.beginPath(); ctx.arc(P.X,P.Y,r+3.2,0,6.2832); ctx.stroke(); }
+    }
+    if(!reduce){ ang+=0.0016; requestAnimationFrame(frame); }
+  }
+  if(reduce){ ang=0.6; ty=0.1; frame(); } else { requestAnimationFrame(frame); }
+})();
+</script>
+<a id="top" style="position:absolute;top:0"></a>
+</body>
+</html>
