@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects — Samia M.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d12; --panel:#12151d; --panel2:#0f1219; --ink:#eef1f7; --mut:#9aa4b8;
+    --line:#232838; --cobalt:#2340DA; --cobalt-2:#5b74ff; --teal:#22c1a6; --amber:#f0b03e;
+    --red:#ff6b6b; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--cobalt-2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1000px;margin:0 auto;padding-inline:20px}
+  code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+
+  header.top{border-bottom:1px solid var(--line);position:sticky;top:0;
+    background:rgba(11,13,18,.82);backdrop-filter:blur(10px);z-index:5}
+  header.top .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:16px}
+  .brand{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.02em;font-size:18px}
+  .brand span{color:var(--cobalt-2)}
+  .navlinks a{color:var(--mut);margin-left:22px;font-size:14px}
+  .navlinks a:hover{color:var(--ink);text-decoration:none}
+
+  .hero{padding-block:64px 40px}
+  .kicker{font-family:"IBM Plex Mono",monospace;color:var(--cobalt-2);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.03em;
+    font-size:clamp(34px,6vw,58px);line-height:1.02;margin:.35em 0 .3em}
+  .lede{color:var(--mut);font-size:clamp(16px,2.4vw,20px);max-width:64ch}
+
+  .proj{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel2));
+    border-radius:var(--radius);padding:28px;margin-block:22px;overflow:hidden}
+  .proj-head{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:baseline;justify-content:space-between}
+  .proj h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;letter-spacing:-.02em;
+    font-size:clamp(22px,3.4vw,30px);margin:0}
+  .tag{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--cobalt-2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap}
+  .sub{color:var(--mut);margin:.5em 0 1.1em;max-width:70ch}
+  .point{list-style:none;padding:0;margin:0 0 6px}
+  .point li{position:relative;padding-left:22px;margin:.4em 0;color:#d7dcea;font-size:15px}
+  .point li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:2px;
+    background:var(--cobalt);transform:rotate(45deg)}
+  .point b{color:var(--ink);font-weight:600}
+  .flow{width:100%;height:auto;margin:18px 0 8px;border-radius:12px;background:#0a0c11;border:1px solid var(--line)}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;padding:9px 15px;font-size:14px;
+    border:1px solid var(--line);color:var(--ink);background:#151926}
+  .btn.pri{background:var(--cobalt);border-color:var(--cobalt);color:#fff;font-weight:600}
+  .btn:hover{text-decoration:none;border-color:var(--cobalt-2)}
+  .run{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--mut);background:#0a0c11;
+    border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-top:12px;display:inline-block}
+
+  footer{border-top:1px solid var(--line);margin-top:40px}
+  footer .wrap{padding-block:26px;color:var(--mut);font-size:13.5px;display:flex;flex-wrap:wrap;
+    gap:8px 18px;justify-content:space-between}
+  .note{color:var(--mut);font-size:12.5px;margin-top:26px;padding-top:16px;border-top:1px dashed var(--line)}
+
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f7f8fb;--panel:#fff;--panel2:#fbfcfe;--ink:#131722;--mut:#5a6478;--line:#e4e8f0;--cobalt-2:#2340DA}
+    header.top{background:rgba(247,248,251,.85)}
+    .flow,.run{background:#f2f4f9}
+    .btn{background:#eef1f8}
+  }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand">Samia M. <span>·</span> Projects</div>
+  <nav class="navlinks">
+    <a href="https://samia4691.github.io/">Home</a>
+    <a href="https://github.com/samia4691/ai-demos">GitHub</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">Reference projects</div>
+    <h1>Systems that hold up in production.</h1>
+    <p class="lede">Three self-contained projects across the work I do most: AI automation, retrieval,
+      and safe agents. Each runs offline with no API keys — the model, tool and datastore calls are
+      stubbed so you read the <em>mechanism</em>, not a framework. Swap a stub for a real provider
+      and the surrounding logic is unchanged.</p>
+  </section>
+
+  <!-- Project 1 -->
+  <article class="proj">
+    <div class="proj-head">
+      <h2>Reliable Lead Automation</h2>
+      <span class="tag">n8n · Make · Zapier</span>
+    </div>
+    <p class="sub">An importable n8n workflow: capture a lead, de-duplicate it, qualify it with an
+      AI step, write it to the CRM, alert sales — built so leads never silently disappear.</p>
+    <ul class="point">
+      <li><b>De-dupe before anything else</b> — a 30-day idempotency key stops double outreach.</li>
+      <li><b>The AI step is schema-checked, not trusted</b> — a bad model reply is downgraded and flagged for review, never written as garbage.</li>
+      <li><b>Idempotent CRM write + retries</b> — a retry after a partial success makes one contact, not two.</li>
+      <li><b>Failures degrade, don't cascade</b> — a Redis or Slack blip can't block a qualified lead.</li>
+    </ul>
+    <svg class="flow" viewBox="0 0 920 118" role="img" aria-label="Lead automation flow">
+      <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#5b74ff"/></marker></defs>
+      <g font-family="IBM Plex Mono, monospace" font-size="11.5" fill="#eef1f7">
+        <g>
+          <rect x="12" y="42" width="120" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="72" y="63" text-anchor="middle">Webhook</text>
+          <rect x="156" y="42" width="128" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="220" y="59" text-anchor="middle">Normalize +</text><text x="220" y="71" text-anchor="middle">dedupe key</text>
+          <rect x="308" y="42" width="120" height="34" rx="8" fill="#151926" stroke="#2340DA"/><text x="368" y="59" text-anchor="middle">AI qualify</text><text x="368" y="71" text-anchor="middle" fill="#9aa4b8">temp 0 · retry×3</text>
+          <rect x="452" y="42" width="128" height="34" rx="8" fill="#151926" stroke="#22c1a6"/><text x="516" y="59" text-anchor="middle">Validate</text><text x="516" y="71" text-anchor="middle" fill="#9aa4b8">allow-list</text>
+          <rect x="604" y="42" width="130" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="669" y="59" text-anchor="middle">CRM upsert</text><text x="669" y="71" text-anchor="middle" fill="#9aa4b8">idempotent</text>
+          <rect x="758" y="42" width="120" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="818" y="63" text-anchor="middle">Slack alert</text>
+        </g>
+        <g stroke="#5b74ff" stroke-width="1.6" marker-end="url(#a1)">
+          <line x1="132" y1="59" x2="152" y2="59"/><line x1="284" y1="59" x2="304" y2="59"/>
+          <line x1="428" y1="59" x2="448" y2="59"/><line x1="580" y1="59" x2="600" y2="59"/>
+          <line x1="734" y1="59" x2="754" y2="59"/>
+        </g>
+      </g>
+    </svg>
+    <div class="actions">
+      <a class="btn pri" href="https://github.com/samia4691/ai-demos/tree/main/projects/automation-lead-engine">View project ↗</a>
+      <a class="btn" href="https://github.com/samia4691/ai-demos/blob/main/projects/automation-lead-engine/workflow.json">workflow.json</a>
+    </div>
+    <span class="run">n8n → Import from File → workflow.json</span>
+  </article>
+
+  <!-- Project 2 -->
+  <article class="proj">
+    <div class="proj-head">
+      <h2>Citation-Grounded RAG</h2>
+      <span class="tag">RAG · retrieval · eval</span>
+    </div>
+    <p class="sub">A complete RAG project built on one rule: if no source clears the relevance floor,
+      the system refuses to answer instead of inventing a confident, uncited one.</p>
+    <ul class="point">
+      <li><b>Score-floor retrieval</b> — the retriever is allowed to return nothing.</li>
+      <li><b>Grounded or refuse</b> — every answer is cited, or it's an honest "I don't have that."</li>
+      <li><b>Measured, not vibed</b> — answerability and citation validity scored on a gold set.</li>
+      <li><b>Regression gate</b> — a config change ships only if neither metric drops.</li>
+    </ul>
+    <svg class="flow" viewBox="0 0 920 118" role="img" aria-label="RAG flow">
+      <defs><marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#5b74ff"/></marker></defs>
+      <g font-family="IBM Plex Mono, monospace" font-size="11.5" fill="#eef1f7">
+        <rect x="12" y="42" width="110" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="67" y="63" text-anchor="middle">Query</text>
+        <rect x="150" y="42" width="150" height="34" rx="8" fill="#151926" stroke="#2340DA"/><text x="225" y="59" text-anchor="middle">Retrieve</text><text x="225" y="71" text-anchor="middle" fill="#9aa4b8">score floor</text>
+        <rect x="330" y="16" width="170" height="34" rx="8" fill="#151926" stroke="#22c1a6"/><text x="415" y="37" text-anchor="middle">Cited answer</text>
+        <rect x="330" y="68" width="170" height="34" rx="8" fill="#151926" stroke="#f0b03e"/><text x="415" y="89" text-anchor="middle">Refuse (nothing clears)</text>
+        <rect x="548" y="42" width="150" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="623" y="59" text-anchor="middle">Gold-set eval</text><text x="623" y="71" text-anchor="middle" fill="#9aa4b8">2 metrics</text>
+        <rect x="726" y="42" width="170" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="811" y="59" text-anchor="middle">Regression gate</text><text x="811" y="71" text-anchor="middle" fill="#9aa4b8">block a drop</text>
+        <g stroke="#5b74ff" stroke-width="1.6" marker-end="url(#a2)">
+          <line x1="122" y1="59" x2="146" y2="59"/>
+          <line x1="300" y1="55" x2="326" y2="35"/><line x1="300" y1="63" x2="326" y2="83"/>
+          <line x1="500" y1="33" x2="544" y2="55"/><line x1="698" y1="59" x2="722" y2="59"/>
+        </g>
+      </g>
+    </svg>
+    <div class="actions">
+      <a class="btn pri" href="https://github.com/samia4691/ai-demos/tree/main/projects/citation-rag">View project ↗</a>
+      <a class="btn" href="https://github.com/samia4691/ai-demos/blob/main/projects/citation-rag/rag/retriever.py">retriever.py</a>
+      <a class="btn" href="https://github.com/samia4691/ai-demos/blob/main/projects/citation-rag/rag/eval.py">eval.py</a>
+    </div>
+    <span class="run">python run.py · pytest -q</span>
+  </article>
+
+  <!-- Project 3 -->
+  <article class="proj">
+    <div class="proj-head">
+      <h2>Support Agent that Deflects — Safely</h2>
+      <span class="tag">agents · guardrails</span>
+    </div>
+    <p class="sub">An end-to-end support agent where every risky action is blocked in code, so it can
+      actually face customers: grounded answers, injection defense, scoped tools, human sign-off on money.</p>
+    <ul class="point">
+      <li><b>Grounded or escalate</b> — answers from the KB with a citation, or hands off; never invents policy.</li>
+      <li><b>Injection defense</b> — user text and tool output are both scanned; a flagged message runs no tools.</li>
+      <li><b>Scoped tools</b> — reading an order is allowed; issuing a refund needs a scope the default agent lacks.</li>
+      <li><b>Human approval on money</b> — refunds are queued for a teammate, never auto-executed. PII redacted on the way out.</li>
+    </ul>
+    <svg class="flow" viewBox="0 0 920 118" role="img" aria-label="Support agent pipeline">
+      <defs><marker id="a3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#5b74ff"/></marker></defs>
+      <g font-family="IBM Plex Mono, monospace" font-size="11.5" fill="#eef1f7">
+        <rect x="12" y="42" width="120" height="34" rx="8" fill="#151926" stroke="#ff6b6b"/><text x="72" y="59" text-anchor="middle">Injection</text><text x="72" y="71" text-anchor="middle" fill="#9aa4b8">scan</text>
+        <rect x="156" y="42" width="110" height="34" rx="8" fill="#151926" stroke="#2340DA"/><text x="211" y="63" text-anchor="middle">Route</text>
+        <rect x="292" y="6" width="180" height="30" rx="8" fill="#151926" stroke="#22c1a6"/><text x="382" y="25" text-anchor="middle">KB answer · cited / refuse</text>
+        <rect x="292" y="44" width="180" height="30" rx="8" fill="#151926" stroke="#2f3550"/><text x="382" y="63" text-anchor="middle">Read tool (scoped)</text>
+        <rect x="292" y="82" width="180" height="30" rx="8" fill="#151926" stroke="#f0b03e"/><text x="382" y="101" text-anchor="middle">Refund → human approval</text>
+        <rect x="516" y="44" width="150" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="591" y="59" text-anchor="middle">Redact PII</text><text x="591" y="71" text-anchor="middle" fill="#9aa4b8">on output</text>
+        <rect x="694" y="44" width="120" height="34" rx="8" fill="#151926" stroke="#2f3550"/><text x="754" y="63" text-anchor="middle">Reply</text>
+        <g stroke="#5b74ff" stroke-width="1.6" marker-end="url(#a3)">
+          <line x1="132" y1="59" x2="152" y2="59"/>
+          <line x1="266" y1="55" x2="288" y2="21"/><line x1="266" y1="59" x2="288" y2="59"/><line x1="266" y1="63" x2="288" y2="97"/>
+          <line x1="472" y1="59" x2="512" y2="59"/><line x1="666" y1="61" x2="690" y2="61"/>
+        </g>
+      </g>
+    </svg>
+    <div class="actions">
+      <a class="btn pri" href="https://github.com/samia4691/ai-demos/tree/main/projects/support-agent">View project ↗</a>
+      <a class="btn" href="https://github.com/samia4691/ai-demos/blob/main/projects/support-agent/support_agent/agent.py">agent.py</a>
+      <a class="btn" href="https://github.com/samia4691/ai-demos/blob/main/projects/support-agent/support_agent/guardrails.py">guardrails.py</a>
+    </div>
+    <span class="run">python run.py · pytest -q</span>
+  </article>
+
+  <p class="note">Each project is a reference implementation. Diagrams and any figures shown are
+    representative of the approach, not a specific client's data or results.</p>
+</main>
+
+<footer><div class="wrap">
+  <span>Samia M. — AI / LLM Engineer</span>
+  <span><a href="https://samia4691.github.io/">samia4691.github.io</a> · <a href="https://github.com/samia4691/ai-demos">github.com/samia4691/ai-demos</a></span>
+</div></footer>
+</body>
+</html>
