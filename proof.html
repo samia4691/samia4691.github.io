@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Samia M. — AI/LLM engineer. A live demo of grounded, citation-first AI versus a bot that hallucinates.">
+<title>AI That Won't Guess</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: single-column editorial scroll; a dark "observability console" world — committed single theme by design. */
+:root{
+  --bg:#0a0e16; --panel:#111726; --panel-2:#161d2e; --raise:#1b2336;
+  --line:#26314a; --line-soft:#1d2740;
+  --fg:#e9eef8; --muted:#9babc6; --faint:#6b7a98;
+  --accent:#7c84ff; --accent-ink:#c3c8ff;
+  --good:#2fd6a6; --good-ink:#8bf0d6;
+  --warn:#f5b13d;
+  --bad:#fb6f8e; --bad-ink:#ffb3c2;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Bricolage Grotesque','Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{width:100%;max-width:1060px;margin:0 auto;
+  padding-left:max(18px,env(safe-area-inset-left,0px));
+  padding-right:max(18px,env(safe-area-inset-right,0px))}
+a{color:var(--accent-ink);text-decoration:none}
+h1,h2,h3{font-family:var(--disp);text-wrap:balance;line-height:1.08;margin:0}
+.mono{font-family:var(--mono)}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.secterm{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);
+  display:inline-flex;align-items:center;gap:.5rem}
+.secterm::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+
+/* ---- hero ---- */
+.hero{position:relative;overflow:hidden;
+  margin-top:calc(-1 * env(safe-area-inset-top,0px));
+  padding-top:calc(env(safe-area-inset-top,0px) + 4.2rem);padding-bottom:3.4rem;
+  border-bottom:1px solid var(--line-soft)}
+.hero .wrap{position:relative;z-index:2}
+.grid-bg{position:absolute;inset:0;z-index:0;opacity:.5;
+  background:
+   radial-gradient(900px 420px at 72% -8%, rgba(124,132,255,.20), transparent 60%),
+   radial-gradient(700px 400px at 8% 8%, rgba(47,214,166,.10), transparent 60%),
+   linear-gradient(transparent 0 97%, var(--line-soft) 97% 100%) 0 0/36px 36px,
+   linear-gradient(90deg,transparent 0 97%, var(--line-soft) 97% 100%) 0 0/36px 36px}
+.statusbar{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good);display:inline-block}
+.hero h1{font-size:clamp(2.5rem,7.2vw,4.6rem);font-weight:800;letter-spacing:-.02em;margin:1.4rem 0 .2rem}
+.hero h1 .hl{color:var(--good-ink)}
+.lede{font-size:clamp(1.05rem,2.3vw,1.3rem);color:var(--muted);max-width:40ch;margin:.9rem 0 0}
+.who{margin-top:1.4rem;font-family:var(--mono);font-size:.8rem;color:var(--faint)}
+.who b{color:var(--fg);font-weight:500}
+.cta-row{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.9rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.82rem;font-weight:500;
+  padding:.72rem 1.1rem;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--fg);
+  cursor:pointer;transition:border-color .15s,background .15s,transform .05s}
+.btn:hover{border-color:var(--accent);background:var(--panel-2)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#0a0e16;font-weight:600}
+.btn.primary:hover{background:var(--accent-ink)}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.6rem}
+.pill{font-family:var(--mono);font-size:.72rem;color:var(--muted);border:1px solid var(--line-soft);
+  border-radius:999px;padding:.3rem .7rem;background:#0e1422}
+
+section{padding-block:clamp(3rem,7vw,5rem)}
+.head{max-width:52ch}
+.head h2{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:700;letter-spacing:-.015em;margin:.7rem 0 .5rem}
+.head p{color:var(--muted);margin:.2rem 0 0}
+
+/* ---- live demo ---- */
+.demo{background:
+   linear-gradient(180deg,#0c111d,#0a0e16);
+  border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.console{margin-top:1.8rem;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}
+.console-top{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-bottom:1px solid var(--line-soft);
+  background:#0e1422;font-family:var(--mono);font-size:.74rem;color:var(--faint)}
+.tl{display:flex;gap:.4rem}
+.tl i{width:11px;height:11px;border-radius:50%;display:inline-block;background:#2b3652}
+.ask{padding:1.1rem 1rem 1.2rem}
+.ask label{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.qrow{display:flex;gap:.55rem;margin-top:.55rem}
+#q{flex:1;min-width:0;font-family:var(--body);font-size:1rem;color:var(--fg);background:#0b1120;
+  border:1px solid var(--line);border-radius:10px;padding:.7rem .85rem}
+#q:focus{outline:none;border-color:var(--accent)}
+.qchips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.8rem}
+.qchip{font-family:var(--mono);font-size:.74rem;color:var(--accent-ink);background:#0e1526;border:1px solid var(--line);
+  border-radius:8px;padding:.4rem .7rem;cursor:pointer;transition:border-color .15s,background .15s}
+.qchip:hover{border-color:var(--accent);background:var(--panel-2)}
+.qchip .rk{color:var(--faint)}
+.panes{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line-soft);border-top:1px solid var(--line-soft)}
+.pane{background:var(--panel);padding:1.1rem 1rem 1.3rem;min-width:0}
+.pane h3{font-size:1rem;font-family:var(--disp);font-weight:700;display:flex;align-items:center;gap:.5rem}
+.pane .sub{font-family:var(--mono);font-size:.7rem;color:var(--faint);margin-top:.15rem}
+.tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;padding:.16rem .5rem;border-radius:6px;font-weight:600}
+.tag.mine{color:var(--good-ink);background:rgba(47,214,166,.12);border:1px solid rgba(47,214,166,.35)}
+.tag.them{color:var(--bad-ink);background:rgba(251,111,142,.12);border:1px solid rgba(251,111,142,.35)}
+.retr{font-family:var(--mono);font-size:.72rem;color:var(--muted);background:#0b1120;border:1px solid var(--line-soft);
+  border-radius:9px;padding:.6rem .7rem;margin-top:.9rem;word-wrap:break-word}
+.retr .k{color:var(--faint)}
+.retr .hit{color:var(--good-ink)}
+.retr .miss{color:var(--warn)}
+.answer{margin-top:.85rem;font-size:1rem;line-height:1.55}
+.cite{margin-top:.7rem;font-family:var(--mono);font-size:.72rem;color:var(--good-ink);display:flex;gap:.4rem;align-items:flex-start}
+.cite::before{content:"▸";color:var(--good)}
+.verdict{margin-top:.9rem;display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.72rem;font-weight:600}
+.verdict.ok{color:var(--good-ink)} .verdict.refuse{color:var(--warn)} .verdict.halluc{color:var(--bad-ink)}
+.verdict .mk{width:9px;height:9px;border-radius:2px;display:inline-block}
+.verdict.ok .mk{background:var(--good);box-shadow:0 0 10px var(--good)}
+.verdict.refuse .mk{background:var(--warn);box-shadow:0 0 10px var(--warn)}
+.verdict.halluc .mk{background:var(--bad);box-shadow:0 0 10px var(--bad)}
+.flag{margin-top:.6rem;font-family:var(--mono);font-size:.72rem;color:var(--bad-ink);background:rgba(251,111,142,.08);
+  border:1px dashed rgba(251,111,142,.4);border-radius:8px;padding:.5rem .6rem}
+.thinking{color:var(--faint);font-family:var(--mono);font-size:.8rem}
+.demo-note{margin-top:1rem;font-family:var(--mono);font-size:.73rem;color:var(--faint);max-width:70ch}
+
+/* ---- projects ---- */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.9rem}
+.card{background:var(--panel);border:1px solid var(--line-soft);border-radius:14px;padding:1.15rem 1.1rem;
+  display:flex;flex-direction:column;gap:.5rem;transition:border-color .15s,transform .1s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card .ic{width:34px;height:34px;flex:none}
+.card h3{font-size:1.08rem;font-weight:700;letter-spacing:-.01em}
+.card .hard{color:var(--muted);font-size:.93rem;margin:0}
+.card .hard b{color:var(--fg);font-weight:600}
+.card .lk{margin-top:auto;font-family:var(--mono);font-size:.74rem;color:var(--accent-ink)}
+.card .skills{font-family:var(--mono);font-size:.68rem;color:var(--faint)}
+
+/* ---- principles ---- */
+.princ{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line-soft);
+  border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;margin-top:1.8rem}
+.pr{background:var(--panel);padding:1.2rem 1.1rem}
+.pr .n{font-family:var(--mono);font-size:.72rem;color:var(--accent-ink)}
+.pr h3{font-size:1.02rem;margin:.35rem 0 .35rem;font-weight:700}
+.pr p{color:var(--muted);margin:0;font-size:.92rem}
+
+/* ---- credibility strip ---- */
+.cred{display:flex;flex-wrap:wrap;gap:.6rem 2rem;align-items:center;margin-top:1.4rem;font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+.cred b{color:var(--fg);font-weight:500}
+.stack{margin-top:1.1rem;display:flex;flex-wrap:wrap;gap:.4rem}
+.stack span{font-family:var(--mono);font-size:.72rem;color:var(--muted);border:1px solid var(--line-soft);border-radius:7px;padding:.28rem .6rem;background:#0e1422}
+
+/* ---- cta ---- */
+.final{border-top:1px solid var(--line-soft);background:linear-gradient(180deg,#0b111d,#0a0e16)}
+.final h2{font-size:clamp(1.8rem,4.6vw,2.8rem);font-weight:800;letter-spacing:-.02em;max-width:18ch}
+.final p{color:var(--muted);max-width:46ch;margin:.8rem 0 0}
+.foot{margin-top:2.4rem;padding-top:1.3rem;border-top:1px solid var(--line-soft);
+  display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;align-items:center;font-family:var(--mono);font-size:.74rem;color:var(--faint)}
+
+@media(max-width:720px){
+  .panes{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  .princ{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+html,body{margin:0;padding:0}
+img{max-width:100%;height:auto}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="statusbar"><span class="dot"></span> SYSTEM: grounded &nbsp;·&nbsp; HALLUCINATION RATE: refuses instead &nbsp;·&nbsp; 8+ YRS PYTHON</div>
+    <h1>AI systems that <span class="hl">don't make<br>things up</span>.</h1>
+    <p class="lede">I build RAG, agents and automations that cite their sources, refuse when they don't know, and keep working after launch — not demos that break in week two.</p>
+    <div class="who"><b>Samia M.</b> — AI / LLM Engineer · past LLM roles at <b>xAI</b> & <b>Turing</b></div>
+    <div class="cta-row">
+      <button class="btn primary" id="seeBtn">▶ See the difference, live</button>
+      <a class="btn" href="https://github.com/samia4691/ai-demos" target="_blank" rel="noopener">⟐ Runnable code on GitHub</a>
+      <a class="btn" href="#work-with-me">✉ Work with me</a>
+    </div>
+    <div class="chips">
+      <span class="pill">RAG that cites &amp; refuses</span>
+      <span class="pill">Agents with guardrails</span>
+      <span class="pill">LLM evaluation &amp; regression gates</span>
+      <span class="pill">n8n · Make · Zapier</span>
+      <span class="pill">MCP servers</span>
+    </div>
+  </div>
+</div>
+
+<section class="demo" id="demo">
+  <div class="wrap">
+    <span class="secterm">live demo · no backend, runs in your browser</span>
+    <div class="head">
+      <h2>Ask both bots the same question.</h2>
+      <p>Both answer from the same tiny knowledge base for a made-up company, <b>Meridian</b>. Watch how each one handles a question the docs <em>don't</em> cover.</p>
+    </div>
+
+    <div class="console">
+      <div class="console-top"><span class="tl"><i></i><i></i><i></i></span> meridian-support · knowledge base: 4 docs, 14 lines</div>
+      <div class="ask">
+        <label for="q">Ask a support question</label>
+        <div class="qrow">
+          <input id="q" type="text" autocomplete="off" placeholder="e.g. Are you HIPAA compliant?" value="Are you HIPAA compliant?">
+          <button class="btn primary" id="askBtn">Ask both</button>
+        </div>
+        <div class="qchips" id="qchips"></div>
+      </div>
+      <div class="panes">
+        <div class="pane" id="mine">
+          <h3><span class="tag mine">How I build it</span> Grounded agent</h3>
+          <div class="sub">retrieves first · cites source · refuses to guess</div>
+          <div id="mineBody"></div>
+        </div>
+        <div class="pane" id="them">
+          <h3><span class="tag them">Typical bot</span> Just answers</h3>
+          <div class="sub">confident every time · no source · no floor</div>
+          <div id="themBody"></div>
+        </div>
+      </div>
+    </div>
+    <p class="demo-note">The knowledge base is fictional and the "typical bot" answers are illustrative — but the behaviour is real: an ungrounded model will invent a HIPAA certification or a support phone number without hesitation. The grounded one won't. That gap is the whole job.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="secterm">what I build</span>
+    <div class="head"><h2>Six references, all runnable.</h2>
+      <p>Each one is on GitHub with code and tests. The point of every one is the reliability around the model, not the model call itself.</p></div>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<section style="border-top:1px solid var(--line-soft);background:#0c111d">
+  <div class="wrap">
+    <span class="secterm">how I work</span>
+    <div class="head"><h2>Reliability is the whole product.</h2>
+      <p>A demo that works once is easy. These are the things that keep it working in production.</p></div>
+    <div class="princ">
+      <div class="pr"><div class="n">01</div><h3>Ground it, or refuse</h3><p>Answers cite the exact source, and the system says "I don't know" instead of guessing. No citation, no answer.</p></div>
+      <div class="pr"><div class="n">02</div><h3>Check the model's output</h3><p>Every LLM response is validated against a schema. A bad reply is flagged for review, never written downstream as fact.</p></div>
+      <div class="pr"><div class="n">03</div><h3>Retry, and stay idempotent</h3><p>External calls retry with backoff; writes carry an idempotency key, so a retry never creates a duplicate.</p></div>
+      <div class="pr"><div class="n">04</div><h3>Measure before "done"</h3><p>A gold-set evaluation with a regression gate blocks any change that drops quality. "Better" is a number, not a vibe.</p></div>
+      <div class="pr"><div class="n">05</div><h3>Keep a human in the loop</h3><p>Anything risky — moving money, sending a message — waits for approval. The agent proposes; a person confirms.</p></div>
+      <div class="pr"><div class="n">06</div><h3>Fail loud, not silent</h3><p>Logging and alerts on every step, so a broken webhook pages you instead of quietly dropping work for weeks.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="work-with-me" class="final">
+  <div class="wrap">
+    <span class="secterm">work with me</span>
+    <h2>Have a flaky AI system, or a manual process to automate?</h2>
+    <p>Tell me what's breaking or what you want built. I'll show you a working, documented solution — and you'll know exactly how it behaves when it doesn't know an answer.</p>
+    <div class="cta-row" style="margin-top:1.8rem">
+      <a class="btn primary" href="https://www.upwork.com/freelancers/~01e68ab8a8edf158cc" target="_blank" rel="noopener">Hire me on Upwork →</a>
+      <a class="btn" href="https://github.com/samia4691/ai-demos" target="_blank" rel="noopener">⟐ GitHub · ai-demos</a>
+      <a class="btn" href="https://samia4691.github.io/" target="_blank" rel="noopener">◳ Portfolio site</a>
+    </div>
+    <div class="cred">
+      <span><b>8+ years</b> Python</span>
+      <span>Past LLM roles · <b>xAI</b>, <b>Turing</b></span>
+      <span>US-based (NJ)</span>
+      <span>BSCS · NED University</span>
+    </div>
+    <div class="stack">
+      <span>Python</span><span>FastAPI</span><span>LangChain</span><span>LangGraph</span><span>RAG</span><span>pgvector</span>
+      <span>OpenAI API</span><span>Anthropic API</span><span>MCP</span><span>n8n</span><span>Make</span><span>Zapier</span>
+      <span>PostgreSQL</span><span>Docker</span><span>AWS</span><span>GCP</span>
+    </div>
+    <div class="foot">
+      <span>© Samia M. — AI / LLM Engineer</span>
+      <span>Built as a self-contained page. The demo runs entirely in your browser.</span>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ---------------- knowledge base (fictional) ---------------- */
+const DOCS = [
+  {t:"Billing & Refunds", lines:[
+    "Paid plans are billed monthly or annually.",
+    "Refunds are available within 14 days of a charge, no questions asked.",
+    "After 14 days, charges are non-refundable.",
+    "We accept Visa, Mastercard, Amex, and ACH bank transfer."]},
+  {t:"Uptime & Reliability (SLA)", lines:[
+    "Meridian guarantees 99.9% monthly uptime on Business and Enterprise plans.",
+    "If uptime drops below the guarantee, affected customers receive service credits.",
+    "Status and incident history are published on the Meridian status page."]},
+  {t:"Security & Access", lines:[
+    "Enterprise plans support SAML single sign-on (SSO) with Okta, Azure AD, and Google.",
+    "Customer data is encrypted in transit and at rest.",
+    "After an account is closed, customer data is retained for 30 days, then permanently deleted."]},
+  {t:"Support & Plans", lines:[
+    "Support is available by email and chat, 24 hours a day on weekdays, in English.",
+    "Enterprise customers get a dedicated Slack channel and a named contact.",
+    "Plans are Starter, Business, and Enterprise."]}
+];
+const STOP = new Set("the a an is are do does you your we our of to in on for with and or can i me my it that this what which how long when where who will would within after".split(" "));
+const FLOOR = 0.34;
+function norm(w){w=w.toLowerCase().replace(/[^a-z0-9]/g,"");if(w.length>3&&w.endsWith("s"))w=w.slice(0,-1);return w;}
+function toks(s){return s.split(/\s+/).map(norm).filter(w=>w.length>2&&!STOP.has(w));}
+function retrieve(query){
+  const qt=toks(query); if(!qt.length) return {score:0,best:null};
+  let best=null,bestScore=0;
+  DOCS.forEach((d,di)=>d.lines.forEach((ln,li)=>{
+    const lt=new Set(toks(ln));
+    let hit=0; qt.forEach(t=>{ if(lt.has(t)) hit++; });
+    const sc=hit/qt.length;
+    if(sc>bestScore){bestScore=sc;best={doc:d.t,di,li,line:ln};}
+  }));
+  return {score:bestScore,best:bestScore>=FLOOR?best:null,qt};
+}
+/* typical bot's confident fabrications for out-of-scope questions */
+function fabricate(query){
+  const s=query.toLowerCase();
+  if(/bitcoin|crypto|ethereum/.test(s)) return "Yes — Meridian accepts Bitcoin and most major cryptocurrencies at checkout, and gives a 10% discount for paying annually in crypto.";
+  if(/hipaa|phi|baa|health/.test(s)) return "Absolutely. Meridian is fully HIPAA-compliant and will sign a BAA on all paid plans.";
+  if(/phone|call|number|hotline/.test(s)) return "Of course — you can reach Meridian support 24/7 by phone at +1 (800) 555-0199.";
+  if(/discount|coupon|promo|code|cheaper/.test(s)) return "Yes! Use code SAVE20 at checkout for 20% off your first year.";
+  if(/gdpr|soc ?2|iso|pci/.test(s)) return "Yes, Meridian is fully GDPR, SOC 2 and ISO 27001 certified across all plans.";
+  if(/refund|cancel|money back/.test(s)) return "Sure — Meridian offers a full 30-day money-back guarantee on every plan, anytime.";
+  return "Yes, Meridian supports that out of the box — just turn it on in Settings and you're all set.";
+}
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function render(query){
+  const r=retrieve(query);
+  const mine=document.getElementById('mineBody');
+  const them=document.getElementById('themBody');
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  mine.innerHTML='<div class="thinking mono">retrieving…</div>';
+  them.innerHTML='<div class="thinking mono">generating…</div>';
+  const go=()=>{
+    /* grounded pane */
+    if(r.best){
+      mine.innerHTML=
+        '<div class="retr"><span class="k">retrieved:</span> "'+esc(r.best.line)+'" '+
+        '<span class="hit">· '+esc(r.best.doc)+' · score '+r.score.toFixed(2)+'</span></div>'+
+        '<div class="answer">'+esc(r.best.line)+'</div>'+
+        '<div class="cite">source: Meridian Docs → '+esc(r.best.doc)+', line '+(r.best.li+1)+'</div>'+
+        '<div class="verdict ok"><span class="mk"></span>GROUNDED · answered from a cited source</div>';
+    }else{
+      mine.innerHTML=
+        '<div class="retr"><span class="k">retrieved:</span> <span class="miss">nothing scored above the '+FLOOR+' floor (best '+r.score.toFixed(2)+')</span></div>'+
+        '<div class="answer">That isn’t covered in Meridian’s documentation, so I won’t answer it. I’d confirm with your team and add it to the knowledge base before the agent responds.</div>'+
+        '<div class="verdict refuse"><span class="mk"></span>REFUSED · won’t guess outside the sources</div>';
+    }
+    /* typical pane */
+    if(r.best){
+      them.innerHTML=
+        '<div class="answer">'+esc(r.best.line.replace(/\.$/,''))+' — and it’s one of our most popular features.</div>'+
+        '<div class="verdict halluc" style="color:var(--faint)"><span class="mk" style="background:var(--faint);box-shadow:none"></span>no source cited</div>';
+    }else{
+      them.innerHTML=
+        '<div class="answer">'+esc(fabricate(query))+'</div>'+
+        '<div class="flag">⚠ Fabricated — this isn’t in any Meridian document. The model invented it to sound helpful.</div>'+
+        '<div class="verdict halluc"><span class="mk"></span>HALLUCINATED · confident and wrong</div>';
+    }
+  };
+  if(reduce) go(); else setTimeout(go,460);
+}
+
+/* sample questions */
+const SAMPLES=[
+  {q:"Are you HIPAA compliant?",rk:"not in docs"},
+  {q:"Can I pay with Bitcoin?",rk:"not in docs"},
+  {q:"What uptime do you guarantee?",rk:"in docs"},
+  {q:"Do you support SAML SSO?",rk:"in docs"},
+  {q:"What's your refund policy?",rk:"in docs"},
+  {q:"Is there a phone number for support?",rk:"not in docs"}
+];
+const qc=document.getElementById('qchips');
+SAMPLES.forEach(s=>{
+  const b=document.createElement('button');
+  b.className='qchip';
+  b.innerHTML=esc(s.q)+' <span class="rk">· '+s.rk+'</span>';
+  b.addEventListener('click',()=>{document.getElementById('q').value=s.q;render(s.q);});
+  qc.appendChild(b);
+});
+document.getElementById('askBtn').addEventListener('click',()=>{
+  const v=document.getElementById('q').value.trim(); if(v) render(v);
+});
+document.getElementById('q').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){const v=e.target.value.trim(); if(v) render(v);}
+});
+document.getElementById('seeBtn').addEventListener('click',()=>{
+  document.getElementById('demo').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
+});
+/* first frame already shows the strongest contrast */
+render("Are you HIPAA compliant?");
+
+/* ---------------- project cards ---------------- */
+const ic=(p)=>'<svg class="ic" viewBox="0 0 40 40" fill="none" stroke="#7c84ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+const PROJ=[
+  {t:"Citation-Grounded RAG",ic:'<rect x="6" y="7" width="20" height="26" rx="2"/><path d="M11 14h10M11 19h10M11 24h6"/><circle cx="29" cy="27" r="6"/><path d="M29 24.5v5M26.5 27h5"/>',
+   hard:"<b>The hard part:</b> a score floor so it returns nothing instead of a confident wrong answer — with a gold-set eval so quality can’t drift.",
+   skills:"RAG · LangChain · pgvector · Python",lk:"projects/citation-rag",url:"https://github.com/samia4691/ai-demos/tree/main/projects/citation-rag"},
+  {t:"Reliable Lead Automation",ic:'<path d="M7 10h9l3 4h14"/><rect x="7" y="14" width="26" height="18" rx="2"/><path d="M13 23l4 4 8-9"/>',
+   hard:"<b>The hard part:</b> de-dupe, schema-checked AI, idempotent CRM writes and retries — so leads never silently disappear.",
+   skills:"n8n · Make · API Integration",lk:"projects/automation-lead-engine",url:"https://github.com/samia4691/ai-demos/tree/main/projects/automation-lead-engine"},
+  {t:"Support Agent, Guardrailed",ic:'<path d="M20 5l12 5v8c0 8-5 13-12 17C13 31 8 26 8 18v-8z"/><path d="M15 19l4 4 7-8"/>',
+   hard:"<b>The hard part:</b> prompt-injection detection, scoped tools, PII redaction, and human approval before anything moves money.",
+   skills:"AI Agents · LangChain · Python",lk:"projects/support-agent",url:"https://github.com/samia4691/ai-demos/tree/main/projects/support-agent"},
+  {t:"LLM Evaluation & Gating",ic:'<path d="M20 6v7M10 13h20M10 13l-4 11a6 6 0 0012 0zM30 13l-4 11a6 6 0 0012 0z"/><path d="M14 34h12"/>',
+   hard:"<b>The hard part:</b> order-swapped LLM-as-judge to kill position bias, behind a regression gate that blocks quality drops.",
+   skills:"Eval · MLOps · Python",lk:"llm_eval_harness.py",url:"https://github.com/samia4691/ai-demos/blob/main/llm_eval_harness.py"},
+  {t:"Secure MCP Server",ic:'<rect x="7" y="7" width="26" height="26" rx="3"/><path d="M20 14v12M14 20h12"/><circle cx="20" cy="20" r="3" fill="#7c84ff" stroke="none"/>',
+   hard:"<b>The hard part:</b> JWT → tenant + scope, deny by default, tenant-filtered queries, and an audit log on every tool call.",
+   skills:"MCP · FastAPI · API Integration",lk:"mcp_server.py",url:"https://github.com/samia4691/ai-demos/blob/main/mcp_server.py"},
+  {t:"Document Extraction",ic:'<path d="M12 6h12l6 6v22H12z"/><path d="M24 6v6h6"/><path d="M16 20h12M16 25h12M16 30h7"/>',
+   hard:"<b>The hard part:</b> OCR → schema-enforced extraction → a confidence gate that auto-approves, routes to review, or rejects.",
+   skills:"NLP · Python · Automation",lk:"doc_extraction.py",url:"https://github.com/samia4691/ai-demos/blob/main/doc_extraction.py"}
+];
+const cards=document.getElementById('cards');
+PROJ.forEach(p=>{
+  const a=document.createElement('a');
+  a.className='card'; a.href=p.url; a.target="_blank"; a.rel="noopener";
+  a.innerHTML=ic(p.ic)+'<h3>'+esc(p.t)+'</h3><p class="hard">'+p.hard+'</p>'+
+    '<div class="skills">'+esc(p.skills)+'</div><div class="lk">⟐ '+esc(p.lk)+' →</div>';
+  cards.appendChild(a);
+});
+</script>
+</body>
+</html>
